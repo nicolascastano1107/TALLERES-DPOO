@@ -1,0 +1,60 @@
+{
+	"clientes": [
+		{
+			"tipoCliente": "Natural",
+			"nombre": "Alice"
+		},
+		{
+			"tipoCliente": "CORPORATIVO",
+			"nombreEmpresa": "Apple",
+			"tamanoEmpresa": 3
+		},
+		{
+			"tipoCliente": "Natural",
+			"nombre": "Bob"
+		},
+		{
+			"tipoCliente": "CORPORATIVO",
+			"nombreEmpresa": "Boeing",
+			"tamanoEmpresa": 2
+		}
+	],
+	
+	
+		"rutas": [
+		    {
+		      "codigoRuta": "4558",
+		      "horaSalida": "08:00",
+		      "horaLlegada": "09:30",
+		      "origen": "BOG",
+		      "destino": "MDE"
+		    }
+		  ],
+		  
+		  "aviones": [
+		    {
+		      "nombre": "A320",
+		      "capacidad": 180
+		    }
+		  ],
+		  "vuelos": [
+		    {
+		      "codigoRuta": "4558",
+		      "fecha": "2024-11-05",
+		      "avion": "A320"
+		    }
+			]
+	
+	,
+	
+	"tiquetes": [
+		{
+			"codigoRuta": "4558",
+			"fecha": "2024-11-05",
+			"codigoTiquete" : "8769647",
+			"tarifa": 450000,
+			"usado": false,
+			"cliente": "Bob"
+		}
+	],
+	}
