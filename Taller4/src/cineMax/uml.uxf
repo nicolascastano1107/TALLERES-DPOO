@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.1.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>70</x>
+      <y>270</y>
+      <w>210</w>
+      <h>200</h>
+    </coordinates>
+    <panel_attributes>/Pelicula /
+--
+- titulo : String
+- genero : String
+- duración : int
+- clasificacion : String
+- fechaEstreno : Date
+- director : String
+- actoresPrincipales : String
+- tematica : string
+- narrador : String
+- tecnicaDeAnimacion: String
+ 
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>410</y>
+      <w>210</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Cine
+--
+- nombre : String
+- dirección : String
+- salas : listaSalas</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>420</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Sala
+--
+-numeroSala : int
+-capacidadSala : int 
+-asientos : listaAsientos
+-tipoTecnologia : String
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>520</x>
+      <y>530</y>
+      <w>210</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Asiento 
+--
+- numeroAsiento: int 
+- numeroFila : int 
+- tipo : String 
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>0</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>P.Lealtad
+--
+-acumulacionDePuntos : int
+- nivelMembresia : String
+- descuento : float 
+- beneficiosEspeciales : String
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>0</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>Cliente
+--
+- IDDeCliente : int 
+- correoElectrónico : String
+- contraseña : String
+- historialDeCompras : listaCompras</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>450</x>
+      <y>120</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>Pagos
+--
+-metodoPago : String
+-montoApagar : float
+-fechaTransaccion : Date
+-sillasCompradas : listaAsientos
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>700</x>
+      <y>220</y>
+      <w>230</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>Empleados
+--
+-correoElectrónico : String
+-contraseña : String
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>300</y>
+      <w>210</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>Funciones Específicas
+--
+- pelicula: Pelicula
+- fecha : Date  
+- hora : String
+- sala : Sala </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>160</x>
+      <y>120</y>
+      <w>210</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>CompraCliente
+--
+- id: int
+- cliente Cliente 
+- funcion : Funcion
+- asientos : listaAsientos </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>270</x>
+      <y>330</y>
+      <w>70</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1   1</panel_attributes>
+    <additional_attributes>10.0;20.0;50.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>380</y>
+      <w>40</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>1
+1</panel_attributes>
+    <additional_attributes>10.0;40.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>40</y>
+      <w>30</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+
+
+*</panel_attributes>
+    <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>260</x>
+      <y>30</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>                           1</panel_attributes>
+    <additional_attributes>150.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>460</y>
+      <w>140</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1                      .</panel_attributes>
+    <additional_attributes>120.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>160</y>
+      <w>30</w>
+      <h>420</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;400.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>150</y>
+      <w>170</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>                              1</panel_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>10</x>
+      <y>540</y>
+      <w>530</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>                                                                                                                         *
+                                                                                                                </panel_attributes>
+    <additional_attributes>10.0;20.0;510.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>610</x>
+      <y>470</y>
+      <w>30</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+
+
+*</panel_attributes>
+    <additional_attributes>10.0;60.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>330</y>
+      <w>320</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*                                                                     .</panel_attributes>
+    <additional_attributes>10.0;20.0;300.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>250</x>
+      <y>200</y>
+      <w>40</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>250</x>
+      <y>220</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes/>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>400</x>
+      <y>230</y>
+      <w>40</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>
+
+1</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>630</x>
+      <y>30</y>
+      <w>90</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>1        1</panel_attributes>
+    <additional_attributes>10.0;20.0;70.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>810</x>
+      <y>280</y>
+      <w>40</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+1
+
+
+</panel_attributes>
+    <additional_attributes>10.0;70.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>500</x>
+      <y>440</y>
+      <w>180</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>*                             1</panel_attributes>
+    <additional_attributes>10.0;20.0;160.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>360</x>
+      <y>150</y>
+      <w>110</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>1             1
+
+-pagoHecho</panel_attributes>
+    <additional_attributes>90.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>0</y>
+      <w>100</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>CineMax</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
