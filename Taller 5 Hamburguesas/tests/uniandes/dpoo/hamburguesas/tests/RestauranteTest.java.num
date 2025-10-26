@@ -1,0 +1,206 @@
+   1: package uniandes.dpoo.hamburguesas.tests;
+   2: 
+   3: import static org.junit.jupiter.api.Assertions.*;
+   4: 
+   5: import java.io.File;
+   6: import java.io.IOException;
+   7: import java.nio.charset.StandardCharsets;
+   8: import java.nio.file.Files;
+   9: import java.nio.file.Path;
+  10: import org.junit.jupiter.api.BeforeEach;
+  11: import org.junit.jupiter.api.Test;
+  12: 
+  13: import uniandes.dpoo.hamburguesas.excepciones.HamburguesaException;
+  14: import uniandes.dpoo.hamburguesas.excepciones.NoHayPedidoEnCursoException;
+  15: import uniandes.dpoo.hamburguesas.excepciones.ProductoFaltanteException;
+  16: import uniandes.dpoo.hamburguesas.excepciones.ProductoRepetidoException;
+  17: import uniandes.dpoo.hamburguesas.excepciones.YaHayUnPedidoEnCursoException;
+  18: import uniandes.dpoo.hamburguesas.mundo.Pedido;
+  19: import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
+  20: import uniandes.dpoo.hamburguesas.mundo.Restaurante;
+  21: 
+  22: public class RestauranteTest {
+  23: 
+  24:     private Restaurante restaurante;
+  25: 
+  26:     @BeforeEach
+  27:     void setUp() {
+  28:         restaurante = new Restaurante();
+  29:     }
+  30: 
+  31:     @Test
+  32:     void testCargarInformacionRestauranteOK() throws Exception {
+  33:         File ingredientes = new File("data/ingredientes.txt");
+  34:         File menu = new File("data/menu.txt");
+  35:         File combos = new File("data/combos.txt");
+  36:         restaurante.cargarInformacionRestaurante(ingredientes, menu, combos);
+  37:         assertEquals(15, restaurante.getIngredientes().size());
+  38:         assertEquals(22, restaurante.getMenuBase().size());
+  39:         assertEquals(4, restaurante.getMenuCombos().size());
+  40:     }
+  41: 
+  42:     @Test
+  43:     void testIniciarYCerrarPedido() throws Exception {
+  44:         File carpeta = new File("./facturas/");
+  45:         carpeta.mkdirs();
+  46:         File[] files = carpeta.listFiles();
+  47:         if (files != null) {
+  48:             for (File f : files) f.delete();
+  49:         }
+  50:         carpeta.delete();
+  51: 
+  52:         restaurante.iniciarPedido("Juan", "Calle 1");
+  53:         assertNotNull(restaurante.getPedidoEnCurso());
+  54: 
+  55:        
+  56:         restaurante.cargarInformacionRestaurante(new File("data/ingredientes.txt"), new File("data/menu.txt"), new File("data/combos.txt"));
+  57:         ProductoMenu primero = restaurante.getMenuBase().get(0);
+  58:         Pedido p = restaurante.getPedidoEnCurso();
+  59:         p.agregarProducto(primero);
+  60: 
+  61:        
+  62:         try {
+  63:             restaurante.cerrarYGuardarPedido();
+  64:         } catch (java.io.IOException e) {
+  65:             fail("No debió fallar guardando la factura: " + e.getMessage());
+  66:         }
+  67:         assertNull(restaurante.getPedidoEnCurso());
+  68:         assertEquals(1, restaurante.getPedidos().size());
+  69: 
+  70:         
+  71:         restaurante.iniciarPedido("Juan2", "Calle 2");
+  72:         Pedido p2 = restaurante.getPedidoEnCurso();
+  73:         p2.agregarProducto(new ProductoMenu("agua cristal sin gas", 5000));
+  74:         try {
+  75:             restaurante.cerrarYGuardarPedido();
+  76:         } catch (java.io.IOException e) {
+  77:             fail("No debió fallar guardando la factura (2): " + e.getMessage());
+  78:         }
+  79:         assertEquals(2, restaurante.getPedidos().size());
+  80: 
+  81:         File[] guardados = carpeta.listFiles();
+  82:         assertNotNull(guardados);
+  83:         assertTrue(guardados.length >= 2);
+  84:     }
+  85: 
+  86:     @Test
+  87:     void testCerrarPedidoSinPedido() throws IOException {
+  88:         boolean lanzada = false;
+  89:         try {
+  90:             restaurante.cerrarYGuardarPedido();
+  91:         } catch (NoHayPedidoEnCursoException e) {
+  92:             lanzada = true;
+  93:             assertEquals("Actualmente no hay un pedido en curso", e.getMessage());
+  94:         }
+  95:         assertTrue(lanzada);
+  96:     }
+  97: 
+  98:     @Test
+  99:     void testIniciarPedidoConPedidoEnCurso() throws Exception {
+ 100:         restaurante.iniciarPedido("Ana", "Av 3");
+ 101:         boolean lanzada = false;
+ 102:         try {
+ 103:             restaurante.iniciarPedido("Luis", "Calle 9");
+ 104:         } catch (YaHayUnPedidoEnCursoException e) {
+ 105:             lanzada = true;
+ 106:             String msg = e.getMessage();
+ 107:             assertTrue(msg.startsWith("Ya existe un pedido en curso"));
+ 108:         }
+ 109:         assertTrue(lanzada);
+ 110:     }
+ 111: 
+ 112:     @Test
+ 113:     void testIngredientesRepetidos() throws Exception {
+ 114:         Path tmpIng = Files.createTempFile("ingredientes_", ".txt");
+ 115:         Files.write(tmpIng, ("tomate;1000\n" + "tomate;1000\n").getBytes(StandardCharsets.UTF_8));
+ 116:         boolean lanzada = false;
+ 117:         try {
+ 118:             restaurante.cargarInformacionRestaurante(tmpIng.toFile(), new File("data/menu.txt"), new File("data/combos.txt"));
+ 119:         } catch (HamburguesaException e) {
+ 120:             lanzada = true;
+ 121:             String msg = e.getMessage();
+ 122:             assertTrue(msg.toLowerCase().contains("ingrediente"));
+ 123:             assertTrue(msg.contains("tomate"));
+ 124:             assertTrue(msg.contains("repetido"));
+ 125:         }
+ 126:         assertTrue(lanzada);
+ 127:     }
+ 128: 
+ 129:     @Test
+ 130:     void testProductoRepetidoEnMenu() throws Exception {
+ 131:         Path tmpMenu = Files.createTempFile("menu_", ".txt");
+ 132:         Files.write(tmpMenu, "corral;14000\ncorral;14000\n".getBytes(StandardCharsets.UTF_8));
+ 133:         boolean lanzada = false;
+ 134:         try {
+ 135:             restaurante.cargarInformacionRestaurante(new File("data/ingredientes.txt"), tmpMenu.toFile(), new File("data/combos.txt"));
+ 136:         } catch (ProductoRepetidoException e) {
+ 137:             lanzada = true;
+ 138:             String msg = e.getMessage();
+ 139:             assertTrue(msg.toLowerCase().contains("producto"));
+ 140:             assertTrue(msg.contains("corral"));
+ 141:             assertTrue(msg.contains("repetido"));
+ 142:         }
+ 143:         assertTrue(lanzada);
+ 144:     }
+ 145: 
+ 146:     @Test
+ 147:     void testProductoFaltanteEnCombo() throws Exception {
+ 148:         Path tmpCombos = Files.createTempFile("combos_", ".txt");
+ 149:         Files.write(tmpCombos, "combo X;10%;producto_que_no_existe\n".getBytes(StandardCharsets.UTF_8));
+ 150:         boolean lanzada = false;
+ 151:         try {
+ 152:             restaurante.cargarInformacionRestaurante(new File("data/ingredientes.txt"), new File("data/menu.txt"), tmpCombos.toFile());
+ 153:         } catch (ProductoFaltanteException e) {
+ 154:             lanzada = true;
+ 155:             String msg = e.getMessage();
+ 156:             assertTrue(msg.toLowerCase().contains("producto"));
+ 157:             assertTrue(msg.contains("producto_que_no_existe"));
+ 158:             assertTrue(msg.toLowerCase().contains("informaci"));
+ 159:         }
+ 160:         assertTrue(lanzada);
+ 161:     }
+ 162: 
+ 163:     @Test
+ 164:     void testComboRepetido() throws Exception {
+ 165:         Path tmpCombos = Files.createTempFile("combos_rep_", ".txt");
+ 166:         Files.write(tmpCombos, "combo rep;10%;corral\ncombo rep;7%;corral queso\n".getBytes(StandardCharsets.UTF_8));
+ 167:         boolean lanzada = false;
+ 168:         try {
+ 169:             restaurante.cargarInformacionRestaurante(new File("data/ingredientes.txt"), new File("data/menu.txt"), tmpCombos.toFile());
+ 170:         } catch (ProductoRepetidoException e) {
+ 171:             lanzada = true;
+ 172:             String msg = e.getMessage();
+ 173:             assertTrue(msg.toLowerCase().contains("producto"));
+ 174:             assertTrue(msg.contains("combo rep"));
+ 175:             assertTrue(msg.contains("repetido"));
+ 176:         }
+ 177:         assertTrue(lanzada);
+ 178:     }
+ 179: 
+ 180:     @Test
+ 181:     void testArchivosConLineasVacias() throws Exception {
+ 182:         Path ing = Files.createTempFile("ing_blancos_", ".txt");
+ 183:         Path men = Files.createTempFile("men_blancos_", ".txt");
+ 184:         Path com = Files.createTempFile("com_blancos_", ".txt");
+ 185:         Files.write(ing, "\n\n".getBytes(StandardCharsets.UTF_8));
+ 186:         Files.write(men, "\n\n".getBytes(StandardCharsets.UTF_8));
+ 187:         Files.write(com, "\n\n".getBytes(StandardCharsets.UTF_8));
+ 188:         restaurante.cargarInformacionRestaurante(ing.toFile(), men.toFile(), com.toFile());
+ 189:         assertEquals(0, restaurante.getIngredientes().size());
+ 190:         assertEquals(0, restaurante.getMenuBase().size());
+ 191:         assertEquals(0, restaurante.getMenuCombos().size());
+ 192:     }
+ 193: 
+ 194:     @Test
+ 195:     void testComboSinItems() throws Exception {
+ 196:         Path ing = Files.createTempFile("ing_vacio_", ".txt");
+ 197:         Path men = Files.createTempFile("men_vacio_", ".txt");
+ 198:         Path com = Files.createTempFile("com_sin_items_", ".txt");
+ 199:         Files.write(ing, new byte[0]);
+ 200:         Files.write(men, new byte[0]);
+ 201:         Files.write(com, "combo raro;5%\n".getBytes(StandardCharsets.UTF_8));
+ 202:         restaurante.cargarInformacionRestaurante(ing.toFile(), men.toFile(), com.toFile());
+ 203:         assertEquals(1, restaurante.getMenuCombos().size());
+ 204:         assertEquals("combo raro", restaurante.getMenuCombos().get(0).getNombre());
+ 205:     }
+ 206: }

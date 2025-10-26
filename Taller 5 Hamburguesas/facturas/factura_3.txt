@@ -1,0 +1,9 @@
+Cliente: Carlos
+Dirección: Calle 10
+----------------
+dummy
+            100
+----------------
+Precio Neto:  100
+IVA:          19
+Precio Total: 119
